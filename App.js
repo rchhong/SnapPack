@@ -1,47 +1,20 @@
 import React , {Component} from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Button,
-  TouchableOpacity
-} from 'react-native';
 
-import List from './views/List'
-// const AppNavigator = createStackNavigator({
+import HomeScreen from './views/HomeScreen'
+import EditListScreen from './views/EditListScreen';
 
-// });
-
-// export default createAppContainer(AppNavigator)
-
-export default class App extends Component
-{
-  constructor(props)
-  {
-    super(props);
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions : {
+      header: null
+    }
+  },
+  EditList: {
+    screen: EditListScreen,
   }
-  render() {
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={{flex : 1, backgroundColor : "#FF9999"}}>
-          <View style={{flex: 2, justifyContent: "space-between"}}>
-            <Text style={{fontSize: 50, textAlign: "center"}}>
-              PackSnap
-            </Text>
-            <List />
-            <List />
-          </View>
-          <View style={{flex: 1}}>
+});
 
-          </View>
-        </SafeAreaView>
-      </>
-    );
-  }
-}
+export default createAppContainer(AppNavigator)
