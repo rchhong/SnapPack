@@ -13,6 +13,7 @@ const AppNavigator = createStackNavigator({
     }
   },
   EditList: {
+    title: "Edit List",
     screen: EditListScreen,
   }
 });

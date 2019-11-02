@@ -48,7 +48,9 @@ export default class HomeScreen extends Component
 
   handleSubmit()
   {
-    this.props.navigation.navigate('EditList');
+    let {textTitle, textNotes} = this.state;
+    console.log(textTitle + " ", textNotes);
+    this.props.navigation.navigate('EditList', {textTitle, textNotes});
   }
 
   render() {
