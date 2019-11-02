@@ -2,8 +2,26 @@ import React , {Component} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
+
+const styles = StyleSheet.create({
+	listItem: {
+		backgroundColor: '#F3D250', 
+		alignItems: 'center',      
+		justifyContent: 'center', 
+		height: 100, 
+		borderRadius: 15,
+		marginBottom: 30,
+		elevation: 30,
+	},
+	listText:{
+		color: '#424242',
+		fontSize: 25,
+	}
+
+});
 
 export default class List extends Component {
 
@@ -14,11 +32,9 @@ export default class List extends Component {
     render()
     {
         return (
-            <TouchableOpacity style={{width: '80%', marginLeft: '10%'}}>
-                <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                justifyContent: 'center', height: 100, borderRadius: 15}}
-                    >
-                    <Text style = {{color: 'white'}}>Button</Text>
+            <TouchableOpacity style={{width: '70%', marginLeft: '15%'}}>
+                <View style = {styles.listItem}>
+                    <Text style = {styles.listText}>Button</Text>
                 </View>
             </TouchableOpacity>
         );

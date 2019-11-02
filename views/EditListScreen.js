@@ -12,6 +12,16 @@ import {
 } from 'react-native';
 
 import ListItem from './ListItem';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const styles = StyleSheet.create({
+	header: {
+		color: '#ECECEC',
+		fontSize: 50, 
+		textAlign: "center",
+		marginTop: 25,
+	},
+});
 
 export default class EditListScreen extends Component {
 
@@ -31,9 +41,13 @@ export default class EditListScreen extends Component {
           opacity: 1.0,
           valueItem: "",
           valueQuantity: "",
-          data: [{item: "shampoo", quantity: 4}, {item: "water", quantity: 1}],
+          data: [],
         };
     }
+
+
+
+
     componentDidMount()
     {
       let textTitle = this.props.navigation.getParam('textTitle', "");
@@ -53,11 +67,16 @@ export default class EditListScreen extends Component {
       this.setState({
         valueItem: "",
         valueQuantity: "",
-      })
+      });
       this.handleOnTouch();
       // let {textTitle, textNotes} = this.state;
       // console.log(textTitle + " ", textNotes);
       // this.props.navigation.navigate('EditList', {textTitle, textNotes});
+    }
+
+    componentDidMount() {
+      let data = this.getData("@" + this.state.textTitle);
+      console.log(data);
     }
 
     handleOnTouch()
@@ -69,6 +88,34 @@ export default class EditListScreen extends Component {
       });
     }
 
+    handleFinishList()
+    {
+      this.storeData();
+    }
+
+    async getData(key) {
+      try {
+        let retrivedData = await AsyncStorage.getItem("@"+key);
+        return JSON.parse(retrivedData);
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
+
+    async storeData() {
+      let fullItem = {note: this.state.textNotes, data : this.state.data};
+      console.log(fullItem);
+      let parsed = JSON.stringify(fullItem);
+      console.log(parsed);
+      console.log(JSON.parse(parsed));
+      try {
+        await AsyncStorage.setItem("@"+this.state.textTitle, JSON.stringify(fullItem));
+      }
+      catch(e) {
+        console.log(e);
+      }
+    }
     render() {
       //console.log(this.state);
       return (
@@ -84,6 +131,13 @@ export default class EditListScreen extends Component {
                 )}
               />
               <TouchableOpacity onPress={this.handleOnTouch.bind(this)}>
+                <View style = {{backgroundColor: 'red', alignItems: 'center', 
+                                justifyContent: 'center', width: 50, height: 50, borderRadius: 200, marginBottom: 15}}
+                    >
+                    <Text style = {{color: 'white'}}>Add</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.handleFinishList.bind(this)}>
                 <View style = {{backgroundColor: 'red', alignItems: 'center', 
                                 justifyContent: 'center', width: 50, height: 50, borderRadius: 200, marginBottom: 15}}
                     >
