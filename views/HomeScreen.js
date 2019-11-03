@@ -150,7 +150,7 @@ export default class HomeScreen extends Component
             onWillBlur={payload => this.onLeave(payload)}
           />
           <View style={{flex: 1, backgroundColor: "#F78888", opacity: this.state.opacity}}>
-            <View style={{flex: 2, justifyContent: "space-between"}}>
+            <View style={{flex: 3, justifyContent: "space-between"}}>
               <Text style={styles.header}>
                 PackSnap
               </Text>
