@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
   StatusBar,
   TouchableOpacity,
   FlatList
@@ -18,49 +19,48 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
 
 const styles = StyleSheet.create({
+	yellow: {
+		backgroundColor: '#F3D250', 
+	},
+	lightBlue: {
+		backgroundColor: '#90CCF4', 
+	},
+	darkBlue: {
+		backgroundColor: '#5DA2D5',
+	},
+	offWhite:{
+		color: '#ECECEC',
+	},
+	gray: {
+		color: '#424242',
+	},
 
 	header: {
 		color: '#ECECEC',
 		fontSize: 70,
 		textAlign: "center",
-    marginTop: 35,
-    fontFamily : 'Quicksand-Regular'
+		marginTop: 35,
+		marginBottom: 35,
+		fontFamily : 'Quicksand-Regular'
 	},
 	addList:{
 		backgroundColor: '#90CCF4', 
 		alignItems: 'center', 
         justifyContent: 'center', 
-		width: 100, 
-		height: 100, 
-    borderRadius: 400
-    
-	},
-	addListText: {
-		color: 'white',
-		fontSize: 80,
-    fontWeight:'bold',
-    fontFamily : 'Quicksand-Regular'
+		width: 80, 
+		height: 80, 
+		borderRadius: 320
 	},
 
-	confirmButton: {
-		backgroundColor: '#5DA2D5', 
+	optionButtons: {
 		alignItems: 'center',
 		justifyContent: 'center', 
 		width: 120, 
 		height: 40,
 		borderRadius: 15,
 	},
-	cancelButton: {
-		backgroundColor: '#F3D250', 
-		alignItems: 'center',
-		justifyContent: 'center', 
-		width: 120, 
-		height: 40,
-		borderRadius:15
-	}
-
+	
 });
-
 export default class HomeScreen extends Component
 {
   constructor(props)
@@ -81,19 +81,30 @@ export default class HomeScreen extends Component
     
   }
 
+  clear()
+  {
+    try {
+      AsyncStorage.clear()
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
+  }
+
   async getAllData() {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const items = await AsyncStorage.multiGet(keys);
       let data =[];
-      console.log(items);
+      //console.log(items);
       for(let i = 0; i < items.length; i++)
       {
         let foo = JSON.parse(items[i][1]);
         //console.log(foo)
         data[i] = {title: items[i][0].replace(/[^\w+]/gm, ""), ...foo};
       }
-      //console.log(data[0].data);
+      //console.log(data[0]);
       this.setState({data});
     }
     catch(e)
@@ -123,14 +134,14 @@ export default class HomeScreen extends Component
 
   onLoad(payload)
   {
-    console.log("entered scene");
-    console.log(payload)
+    //console.log("entered scene");
+    //console.log(payload)
     this.getAllData();
   }
 
   onLeave(payload)
   {
-    console.log("exited scene");
+    //console.log("exited scene");
     this.setState({
       view: false,
       opacity: 1.0,
@@ -158,7 +169,7 @@ export default class HomeScreen extends Component
                 style={{width: '70%', marginLeft: '15%'}}
                 data={this.state.data}
                 renderItem={({item, index}) => (
-                  <List update={() => this.getAllData()} navigation={this.props.navigation} title={item.title} data={item} />
+                  <List update={() => {this.getAllData()}} navigation={this.props.navigation} title={item.title} data={item} />
                 )}
                 keyExtractor ={(item, index) => index.toString()}
               />
@@ -166,7 +177,8 @@ export default class HomeScreen extends Component
             <View style={{flex: 1, marginTop: 20, alignItems: 'center'}}>
             <TouchableOpacity onPress={this.handleOnTouch.bind(this)} style={{}}>
                   <View style = {styles.addList}>
-                      <Text style = {styles.addListText}>+</Text>
+                    <Image style = {{width:styles.addList.width-30,height:styles.addList.height-30}}
+							            source = {require('../android/app/src/main/assets/imgs/plus.png')}/>
                   </View>
               </TouchableOpacity>
             </View>
@@ -179,12 +191,12 @@ export default class HomeScreen extends Component
                       <TextInput placeholder="Notes" onChangeText={this.handleChangeText.bind(this, "Notes")} value={this.state.text} />
                       <View style={{flexDirection: "row", justifyContent: 'space-between', width: '70%', marginLeft: '15%'}}>
                         <TouchableOpacity onPress={this.handleSubmit.bind(this)} style={{}}>
-                          <View style={styles.confirmButton}>
+                          <View style={[styles.optionButtons,styles.darkBlue]}>
                             <Text style={{ color: '#ECECEC', fontFamily : 'Quicksand-Regular'}}>Confirm</Text>
                           </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.handleOnTouch.bind(this)} style={{}}>
-                          <View style={styles.cancelButton}
+                          <View style={[styles.optionButtons,styles.yellow]}
                           >
                             <Text style={{ color: '#424242', fontFamily : 'Quicksand-Regular' }}>Cancel</Text>
                           </View>

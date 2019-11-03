@@ -5,6 +5,7 @@ import {
   ScrollView,
   View,
   Text,
+  Image,
   StatusBar,
   TextInput,
   TouchableOpacity,
@@ -14,13 +15,54 @@ import {
 import ListItem from './ListItem';
 import AsyncStorage from '@react-native-community/async-storage';
 
+
 const styles = StyleSheet.create({
+	yellow: {
+		backgroundColor: '#F3D250', 
+	},
+	lightBlue: {
+		backgroundColor: '#90CCF4', 
+	},
+	darkBlue: {
+		backgroundColor: '#5DA2D5',
+	},
+	offWhite:{
+		color: '#ECECEC',
+	},
+	gray: {
+		color: '#424242',
+	},
+
 	header: {
 		color: '#ECECEC',
-		fontSize: 50, 
+		fontSize: 70,
 		textAlign: "center",
-		marginTop: 25,
+		marginTop: 35,
+		fontFamily : 'Quicksand-Regular'
 	},
+
+	options:{
+		alignItems: 'center', 
+        justifyContent: 'center', 
+		width: 80, 
+		height: 80, 
+		borderRadius: 320,
+		marginBottom:20,
+	},
+	optionsText: {
+		fontSize: 18,
+		fontWeight:'bold',
+		fontFamily : 'Quicksand-Regular'
+	},
+
+	addElemOptions: {
+		alignItems: 'center',
+		justifyContent: 'center', 
+		width: 120, 
+		height: 40,
+		borderRadius: 15,
+	},
+
 });
 
 export default class EditListScreen extends Component {
@@ -51,9 +93,19 @@ export default class EditListScreen extends Component {
 
     handleSubmit()
     {
-      this.setState({
-        data : [...this.state.data, {item: this.state.valueItem, quantity: Number(this.state.valueQuantity)}]
-      });
+      if(this.state.data.length === 0)
+      {
+        this.setState({
+          data : [{item: this.state.valueItem, quantity: Number(this.state.valueQuantity)}]
+        });
+      }
+      else
+      {
+        this.setState({
+          data : [...this.state.data, {item: this.state.valueItem, quantity: Number(this.state.valueQuantity)}]
+        });
+      }
+
       this.setState({
         valueItem: "",
         valueQuantity: "",
@@ -90,8 +142,9 @@ export default class EditListScreen extends Component {
       try {
         let retrivedData = await AsyncStorage.getItem("@"+key);
         let processed = await JSON.parse(retrivedData);
-        console.log(processed);
-        this.setState({data: processed.data})
+
+        //console.log('werewqrewqrewqrewqerwqrewqrewqrewqr', processed);
+        if(processed !== null) this.setState({data: processed.data})
       }
       catch(e) {
         console.log(e)
@@ -112,33 +165,48 @@ export default class EditListScreen extends Component {
         console.log(e);
       }
     }
+
+    removeIndex(item)
+    {
+      let {data} = this.state;
+      let index = 0;
+      for(let i = 0; i < data.length; i++)
+      {
+        if(item === data[i].item)
+        {
+          index = i;
+          break;
+        }
+      }
+      data.splice(index, 1);
+      this.setState({data});
+    }
+
     render() {
       //console.log(this.state);
       return (
           <>
           <StatusBar barStyle="dark-content" />
           <SafeAreaView style={{flex : 1, backgroundColor : "#000000"}}>
-            <View style={{flex: 1, backgroundColor: "#FFFF00", alignItems: 'center', opacity: this.state.opacity}}>
+            <View style={{flex: 1, backgroundColor: "#F78888", alignItems: 'center', opacity: this.state.opacity}}>
               <FlatList 
                 style={{width: '80%'}}
                 data={this.state.data}
                 renderItem={({item, index}) => (
-                  <ListItem key={index} item={item.item} quantity={item.quantity} />
+                  <ListItem update={(item) => {this.removeIndex(item)}} key={index} item={item.item} seen={true}/>
                 )}
                 keyExtractor ={(item, index) => index.toString()}
               />
               <TouchableOpacity onPress={this.handleOnTouch.bind(this)}>
-                <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                justifyContent: 'center', width: 50, height: 50, borderRadius: 200, marginBottom: 15}}
+                <View style = {[styles.options,styles.lightBlue]}
                     >
-                    <Text style = {{color: 'white'}}>Add</Text>
+                    <Image style = {{width:styles.options.width-30,height:styles.options.height-30}}
+							source = {require('../android/app/src/main/assets/imgs/plus.png')}/>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.handleFinishList.bind(this)}>
-                <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                justifyContent: 'center', width: 50, height: 50, borderRadius: 200, marginBottom: 15}}
-                    >
-                    <Text style = {{color: 'white'}}>Submit</Text>
+              <View style = {[styles.options,styles.darkBlue]}>
+                    <Text style = {[styles.optionsText,styles.offWhite]}>Submit</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -147,24 +215,17 @@ export default class EditListScreen extends Component {
                     <TouchableOpacity style={{}}>
                       <View>
                           <TextInput placeholder="Item" onChangeText={this.handleChangeText.bind(this, "Item")} value={this.state.text} />
-                          <TextInput placeholder="Quantity" keyboardType="numeric" onChangeText={this.handleChangeText.bind(this, "Quantity")} value={this.state.text} />
                           <View style={{flexDirection: "row", justifyContent: 'space-between', width: '60%', marginLeft: '20%'}}>
                             <TouchableOpacity onPress={this.handleSubmit.bind(this)} style={{}}>
-                              <View style={{
-                                backgroundColor: 'red', alignItems: 'center',
-                                justifyContent: 'center', width: 100, height: 50
-                              }}
+                            <View style={[styles.addElemOptions,styles.darkBlue]}
                               >
-                                <Text style={{ color: 'white' }}>Submit</Text>
+                                <Text style={{color:'white',}}>Submit</Text>
                               </View>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this.handleOnTouch.bind(this)} style={{}}>
-                              <View style={{
-                                backgroundColor: 'red', alignItems: 'center',
-                                justifyContent: 'center', width: 100, height: 50
-                              }}
+                            <View style={[styles.addElemOptions,styles.yellow]}
                               >
-                                <Text style={{ color: 'white' }}>Cancel</Text>
+                                <Text style={styles.gray}>Cancel</Text>
                               </View>
                             </TouchableOpacity>
                           </View>

@@ -4,7 +4,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeScreen from './views/HomeScreen'
 import EditListScreen from './views/EditListScreen';
-import Camera from './views/Camera';
+import CameraScreen from './views/Camera';
+import ResultsScreen from './views/Results'
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -16,6 +17,12 @@ const AppNavigator = createStackNavigator({
   EditList: {
     title: "Edit List",
     screen: EditListScreen,
+  },
+  Camera: {
+    screen: CameraScreen
+  },
+  Results: {
+    screen: ResultsScreen
   }
 });
 

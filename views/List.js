@@ -2,6 +2,7 @@ import React , {Component} from 'react';
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
@@ -22,7 +23,21 @@ const styles = StyleSheet.create({
 		color: '#424242',
         fontSize: 25,
         fontFamily : 'Quicksand-Regular'
-	}
+    },
+    listOption: {
+        backgroundColor: '#5DA2D5',
+        alignItems: 'center', 
+        justifyContent: 'center',
+        height: '100%'
+    },
+    leftMost:{
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15
+    },
+    rightMost:{
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15
+    }
 
 });
 
@@ -50,9 +65,9 @@ export default class List extends Component {
     {
         try {
             const asdf = await AsyncStorage.getAllKeys();
-            console.log(asdf);
+            //console.log(asdf);
             let qwer = "@" + this.props.data.title;
-            console.log(asdf[0] === qwer);
+            //console.log(asdf[0] === qwer)
             await AsyncStorage.removeItem("@\"" + this.props.data.title + "\"");
             this.props.update();
         }
@@ -64,12 +79,15 @@ export default class List extends Component {
     {
         let textTitle = this.props.data.title;
         let textNotes = this.props.data.note;
+        //console.log(this.props.data);
         this.props.navigation.navigate('EditList', {textTitle, textNotes});
         this.handleView();
     }
     handleCamera()
     {
-
+        let textTitle = this.props.data.title;
+        let textNotes = this.props.data.note;
+        this.props.navigation.navigate('Camera',  {textTitle, textNotes});
     }
     render()
     {
@@ -80,31 +98,31 @@ export default class List extends Component {
                     this.state.view ? 
                     <View style={{flex: 1, flexDirection : 'row'}}>
                         <TouchableOpacity style={{width: '25%'}} onPress={this.handleView.bind(this)}>
-                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                        justifyContent: 'center', height: '100%'}}
+                            <View style = {[styles.listOption,styles.leftMost]}
                             >
                                 <Text style = {{color: 'white'}}>Cancel</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{width: '25%'}}>
-                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                        justifyContent: 'center', height: '100%'}}
+                        <TouchableOpacity style={{width: '25%'}} onPress={this.handleCamera.bind(this)}>
+                            <View style = {styles.listOption}
                             >
-                                <Text style = {{color: 'white'}}>Camera</Text>
+                                <Image style = {{width:'28%', height: '23%'}}
+							source = {require('../android/app/src/main/assets/imgs/camera.png')}/>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: '25%'}} onPress={this.handleEdit.bind(this)}>
-                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                        justifyContent: 'center', height: '100%'}}
+                            <View style = {styles.listOption}
                             >
-                                <Text style = {{color: 'white'}}>Edit</Text>
+                                <Image style = {{width:'28%', height: '22%'}}
+							source = {require('../android/app/src/main/assets/imgs/pencil.png')}/>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width: '25%'}} onPress={this.handleDelete.bind(this)}>
-                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
-                                        justifyContent: 'center', height: '100%'}}
+                            <View style = {[styles.listOption,styles.rightMost]}
                             >
-                                <Text style = {{color: 'white'}}>Delete</Text>
+                                <Image style = {{width:'25%', height: '20%'}}
+							source = {require('../android/app/src/main/assets/imgs/trash.png')}/>
+                            
                             </View>
                         </TouchableOpacity>
                     </View>
