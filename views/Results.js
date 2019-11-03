@@ -78,6 +78,7 @@ export default class EditListScreen extends Component {
         super(props);
         this.state = {
           textTitle: "",
+          ready: false,
           results: [],
           data: [],
         };
@@ -112,6 +113,8 @@ export default class EditListScreen extends Component {
     {
         let data = this.state.data
         let results = this.state.results
+        //console.log(data)
+        //console.log(results)
         for(let i = 0; i < data.length; i++)
         {
             data[i].seen = false;
@@ -119,16 +122,15 @@ export default class EditListScreen extends Component {
 
         for(let i = 0; i < data.length; i++)
         {
-            let found = false;
-            for(let j = i + 1; j < results.length && !found; j++)
+            for(let j = 0; j < results.length; j++)
             {
                 if(results[j] === data[i].item) 
                  {
-                    found = true;
                     data[i].seen = true;
                  }
             }
         }
+        this.setState({data, results}, () => {this.setState({ready: true})})
     }
 
 
@@ -140,14 +142,17 @@ export default class EditListScreen extends Component {
           <StatusBar barStyle="dark-content" />
           <SafeAreaView style={{flex : 1, backgroundColor : "#000000"}}>
             <View style={{flex: 1, backgroundColor: "#F78888", alignItems: 'center'}}>
-              <FlatList 
-                style={{width: '80%'}}
-                data={this.state.data}
-                renderItem={({item, index}) => (
-                  <ListItem key={index} item={item.item} seen={item.seen}/>
-                )}
-                keyExtractor ={(item, index) => index.toString()}
-              />
+                {
+                    this.state.ready ? <FlatList 
+                    style={{width: '80%'}}
+                    data={this.state.data}
+                    renderItem={({item, index}) => (
+                      <ListItem key={index} item={item.item} seen={item.seen}/>
+                    )}
+                    keyExtractor ={(item, index) => index.toString()}
+                  /> : null
+                }
+
             </View>
           </SafeAreaView>
         </>

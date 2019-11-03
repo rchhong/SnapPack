@@ -46,6 +46,7 @@ export default class ListItem extends Component {
     constructor(props)
     {
         super(props);
+        console.log(this.props)
         let color = this.props.seen ? '#424242' : '#FF0000'
         this.state = {
             color,
