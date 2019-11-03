@@ -1,0 +1,26 @@
+{
+  "name": "file_upload",
+  "version": "1.0.0",
+  "description": "file upload using multer",
+  "main": "index.js",
+  "scripts": {
+    "test": "running"
+  },
+  "repository": {
+    "type": "git",
+    "url": "D:\\Documents\\Projects"
+  },
+  "keywords": [
+    "files"
+  ],
+  "author": "Edward Zhou",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "fs-extra": "^8.1.0",
+    "javascript": "^1.0.0",
+    "mongodb": "^3.3.3",
+    "multer": "^0.1.8"
+  }
+}

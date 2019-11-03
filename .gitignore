@@ -34,6 +34,8 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+server/backend/node_modules/
+
 
 # BUCK
 buck-out/
@@ -57,3 +59,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+server/ML/yolo.h5
+server/ML/venv
+server/ML/HackTX2019-59fe22007a65.json
