@@ -125,6 +125,7 @@ export default class EditListScreen extends Component {
                 renderItem={({item, index}) => (
                   <ListItem key={index} item={item.item} quantity={item.quantity} />
                 )}
+                keyExtractor ={(item, index) => index.toString()}
               />
               <TouchableOpacity onPress={this.handleOnTouch.bind(this)}>
                 <View style = {{backgroundColor: 'red', alignItems: 'center', 

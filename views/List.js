@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
 	listItem: {
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
 		marginBottom: 30,
         elevation: 30,
-        fontFamily : 'Quicksand-Regular'
+        fontFamily : 'Quicksand-Regular',
 	},
 	listText:{
 		color: '#424242',
@@ -29,21 +30,88 @@ export default class List extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            view : false
+        }
     } 
     
-    handleClick()
+    handleView()
     {
-        console.log(this.props.data);
+        //console.log(this.props.data);
+        this.setState({view: !this.state.view})
+
+    }
+    handleDelete()
+    {
+        this.deleteData();
+    }
+
+    async deleteData()
+    {
+        try {
+            const asdf = await AsyncStorage.getAllKeys();
+            console.log(asdf);
+            let qwer = "@" + this.props.data.title;
+            console.log(asdf[0] === qwer);
+            await AsyncStorage.removeItem("@\"" + this.props.data.title + "\"");
+            this.props.update();
+        }
+        catch(e) {
+            console.log(e);
+        }
+    }
+    handleEdit()
+    {
         let textTitle = this.props.data.title;
         let textNotes = this.props.data.note;
         this.props.navigation.navigate('EditList', {textTitle, textNotes});
+        this.handleView();
+    }
+    handleCamera()
+    {
+
     }
     render()
     {
         return (
-            <TouchableOpacity onPress={this.handleClick.bind(this)}>
+            <TouchableOpacity onPress={this.handleView.bind(this)}>
                 <View style = {styles.listItem}>
+                    {
+                    this.state.view ? 
+                    <View style={{flex: 1, flexDirection : 'row'}}>
+                        <TouchableOpacity style={{width: '25%'}} onPress={this.handleView.bind(this)}>
+                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
+                                        justifyContent: 'center', height: '100%'}}
+                            >
+                                <Text style = {{color: 'white'}}>Cancel</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: '25%'}}>
+                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
+                                        justifyContent: 'center', height: '100%'}}
+                            >
+                                <Text style = {{color: 'white'}}>Camera</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: '25%'}} onPress={this.handleEdit.bind(this)}>
+                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
+                                        justifyContent: 'center', height: '100%'}}
+                            >
+                                <Text style = {{color: 'white'}}>Edit</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: '25%'}} onPress={this.handleDelete.bind(this)}>
+                            <View style = {{backgroundColor: 'red', alignItems: 'center', 
+                                        justifyContent: 'center', height: '100%'}}
+                            >
+                                <Text style = {{color: 'white'}}>Delete</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    : 
                     <Text style = {styles.listText}>{this.props.title}</Text>
+                    }
                 </View>
             </TouchableOpacity>
         );

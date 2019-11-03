@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
   SafeAreaView,
@@ -15,11 +15,7 @@ import List from './List'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
-// const AppNavigator = createStackNavigator({
-
-// });
-
-// export default createAppContainer(AppNavigator)
+import { NavigationEvents } from 'react-navigation';
 
 const styles = StyleSheet.create({
 
@@ -75,13 +71,14 @@ export default class HomeScreen extends Component
       opacity: 1.0,
       textTitle: "",
       textNotes: "",
-      data : {}
+      data : []
     }
   }
 
   componentDidMount() {
     //this.clear();
     this.getAllData();
+    
   }
 
   async getAllData() {
@@ -89,7 +86,7 @@ export default class HomeScreen extends Component
       const keys = await AsyncStorage.getAllKeys();
       const items = await AsyncStorage.multiGet(keys);
       let data =[];
-      //console.log(items);
+      console.log(items);
       for(let i = 0; i < items.length; i++)
       {
         let foo = JSON.parse(items[i][1]);
@@ -105,15 +102,6 @@ export default class HomeScreen extends Component
     }
   }
 
-  async clear() {
-    try {
-      await AsyncStorage.clear()
-    }
-    catch(e)
-    {
-      console.log(e);
-    }
-  }
   handleOnTouch() {
     let newOpacity = this.state.view ? 1.0 : .5
     this.setState({
@@ -130,7 +118,26 @@ export default class HomeScreen extends Component
   {
     let {textTitle, textNotes} = this.state;
     //console.log(textTitle + " ", textNotes);
-    this.props.navigation.navigate('EditList', {textTitle, textNotes});
+    this.props.navigation.push('EditList', {textTitle, textNotes});
+  }
+
+  onLoad(payload)
+  {
+    console.log("entered scene");
+    console.log(payload)
+    this.getAllData();
+  }
+
+  onLeave(payload)
+  {
+    console.log("exited scene");
+    this.setState({
+      view: false,
+      opacity: 1.0,
+      textTitle: "",
+      textNotes: "",
+      data : []
+    })
   }
 
   render() {
@@ -138,6 +145,10 @@ export default class HomeScreen extends Component
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={{flex : 1, backgroundColor : "#000000"}}>
+          <NavigationEvents
+            onDidFocus={payload => this.onLoad(payload)}
+            onWillBlur={payload => this.onLeave(payload)}
+          />
           <View style={{flex: 1, backgroundColor: "#F78888", opacity: this.state.opacity}}>
             <View style={{flex: 2, justifyContent: "space-between"}}>
               <Text style={styles.header}>
@@ -147,8 +158,9 @@ export default class HomeScreen extends Component
                 style={{width: '70%', marginLeft: '15%'}}
                 data={this.state.data}
                 renderItem={({item, index}) => (
-                  <List key={index} navigation={this.props.navigation} title={item.title} data={item} />
+                  <List update={() => this.getAllData()} navigation={this.props.navigation} title={item.title} data={item} />
                 )}
+                keyExtractor ={(item, index) => index.toString()}
               />
             </View>
             <View style={{flex: 1, marginTop: 20, alignItems: 'center'}}>
