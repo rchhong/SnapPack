@@ -44,19 +44,9 @@ export default class EditListScreen extends Component {
           data: [],
         };
     }
-
-
-
-
-    componentDidMount()
-    {
-      let textTitle = this.props.navigation.getParam('textTitle', "");
-      let textNotes = this.props.navigation.getParam('textNotes', "");
-      this.setState({textTitle, textNotes});
-    }
     
     handleChangeText(type, text) {
-      this.setState({["value" + type] : text}, () => {console.log(this.state)});
+      this.setState({["value" + type] : text});
     }
 
     handleSubmit()
@@ -75,8 +65,11 @@ export default class EditListScreen extends Component {
     }
 
     componentDidMount() {
-      let data = this.getData("@" + this.state.textTitle);
-      console.log(data);
+      let textTitle = JSON.stringify(this.props.navigation.getParam('textTitle', ""));
+      let textNotes = JSON.stringify(this.props.navigation.getParam('textNotes', ""));
+      //console.log(textTitle + " " + textNotes);
+      this.setState({textTitle, textNotes}, () => {this.getData(textTitle)});
+      //console.log(data);
     }
 
     handleOnTouch()
@@ -96,7 +89,9 @@ export default class EditListScreen extends Component {
     async getData(key) {
       try {
         let retrivedData = await AsyncStorage.getItem("@"+key);
-        return JSON.parse(retrivedData);
+        let processed = await JSON.parse(retrivedData);
+        console.log(processed);
+        this.setState({data: processed.data})
       }
       catch(e) {
         console.log(e)
@@ -104,13 +99,14 @@ export default class EditListScreen extends Component {
     }
 
     async storeData() {
+      //console.log(this.state);
       let fullItem = {note: this.state.textNotes, data : this.state.data};
-      console.log(fullItem);
-      let parsed = JSON.stringify(fullItem);
-      console.log(parsed);
-      console.log(JSON.parse(parsed));
+      // console.log(fullItem);
+      // let parsed = JSON.stringify(fullItem);
+      // console.log(parsed);
+      // console.log(JSON.parse(parsed));
       try {
-        await AsyncStorage.setItem("@"+this.state.textTitle, JSON.stringify(fullItem));
+        await AsyncStorage.setItem("@" + this.state.textTitle, JSON.stringify(fullItem));
       }
       catch(e) {
         console.log(e);

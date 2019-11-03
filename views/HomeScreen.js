@@ -4,17 +4,17 @@ import { createStackNavigator } from 'react-navigation-stack';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
-  Button,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from 'react-native';
 
 import List from './List'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { TextInput } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
 // const AppNavigator = createStackNavigator({
 
 // });
@@ -71,9 +71,45 @@ export default class HomeScreen extends Component
       opacity: 1.0,
       textTitle: "",
       textNotes: "",
+      data : {}
     }
   }
 
+  componentDidMount() {
+    //this.clear();
+    this.getAllData();
+  }
+
+  async getAllData() {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const items = await AsyncStorage.multiGet(keys);
+      let data =[];
+      //console.log(items);
+      for(let i = 0; i < items.length; i++)
+      {
+        let foo = JSON.parse(items[i][1]);
+        //console.log(foo)
+        data[i] = {title: items[i][0].replace(/[^\w+]/gm, ""), ...foo};
+      }
+      //console.log(data[0].data);
+      this.setState({data});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  async clear() {
+    try {
+      await AsyncStorage.clear()
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
   handleOnTouch() {
     let newOpacity = this.state.view ? 1.0 : .5
     this.setState({
@@ -89,7 +125,7 @@ export default class HomeScreen extends Component
   handleSubmit()
   {
     let {textTitle, textNotes} = this.state;
-    console.log(textTitle + " ", textNotes);
+    //console.log(textTitle + " ", textNotes);
     this.props.navigation.navigate('EditList', {textTitle, textNotes});
   }
 
@@ -103,8 +139,13 @@ export default class HomeScreen extends Component
               <Text style={styles.header}>
                 PackSnap
               </Text>
-              <List />
-              <List />
+              <FlatList 
+                style={{width: '70%', marginLeft: '15%'}}
+                data={this.state.data}
+                renderItem={({item, index}) => (
+                  <List key={index} navigation={this.props.navigation} title={item.title} data={item} />
+                )}
+              />
             </View>
             <View style={{flex: 1, marginTop: 20, alignItems: 'center'}}>
             <TouchableOpacity onPress={this.handleOnTouch.bind(this)} style={{}}>

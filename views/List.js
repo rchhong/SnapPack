@@ -28,13 +28,20 @@ export default class List extends Component {
     constructor(props) {
         super(props);
     } 
-
+    
+    handleClick()
+    {
+        console.log(this.props.data);
+        let textTitle = this.props.data.title;
+        let textNotes = this.props.data.note;
+        this.props.navigation.navigate('EditList', {textTitle, textNotes});
+    }
     render()
     {
         return (
-            <TouchableOpacity style={{width: '70%', marginLeft: '15%'}}>
+            <TouchableOpacity onPress={this.handleClick.bind(this)}>
                 <View style = {styles.listItem}>
-                    <Text style = {styles.listText}>Button</Text>
+                    <Text style = {styles.listText}>{this.props.title}</Text>
                 </View>
             </TouchableOpacity>
         );
