@@ -22,11 +22,13 @@ import { TextInput } from 'react-native-gesture-handler';
 // export default createAppContainer(AppNavigator)
 
 const styles = StyleSheet.create({
+
 	header: {
 		color: '#ECECEC',
-		fontSize: 50, 
+		fontSize: 70,
 		textAlign: "center",
-		marginTop: 25,
+    marginTop: 35,
+    fontFamily : 'Quicksand-Regular'
 	},
 	addList:{
 		backgroundColor: '#90CCF4', 
@@ -34,12 +36,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
 		width: 100, 
 		height: 100, 
-		borderRadius: 400
+    borderRadius: 400
+    
 	},
 	addListText: {
 		color: 'white',
 		fontSize: 80,
-		fontWeight:'bold',
+    fontWeight:'bold',
+    fontFamily : 'Quicksand-Regular'
 	},
 
 	confirmButton: {
@@ -97,7 +101,7 @@ export default class HomeScreen extends Component
     return (
       <>
         <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={{flex : 1, backgroundColor : "#000000",}}>
+        <SafeAreaView style={{flex : 1, backgroundColor : "#000000"}}>
           <View style={{flex: 1, backgroundColor: "#F78888", opacity: this.state.opacity}}>
             <View style={{flex: 2, justifyContent: "space-between"}}>
               <Text style={styles.header}>
@@ -123,13 +127,13 @@ export default class HomeScreen extends Component
                       <View style={{flexDirection: "row", justifyContent: 'space-between', width: '70%', marginLeft: '15%'}}>
                         <TouchableOpacity onPress={this.handleSubmit.bind(this)} style={{}}>
                           <View style={styles.confirmButton}>
-                            <Text style={{ color: '#ECECEC' }}>Confirm</Text>
+                            <Text style={{ color: '#ECECEC', fontFamily : 'Quicksand-Regular'}}>Confirm</Text>
                           </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.handleOnTouch.bind(this)} style={{}}>
                           <View style={styles.cancelButton}
                           >
-                            <Text style={{ color: '#424242' }}>Cancel</Text>
+                            <Text style={{ color: '#424242', fontFamily : 'Quicksand-Regular' }}>Cancel</Text>
                           </View>
                         </TouchableOpacity>
                       </View>
