@@ -130,6 +130,7 @@ android {
     defaultConfig {
         applicationId "com.packsnap"
         minSdkVersion rootProject.ext.minSdkVersion
+        missingDimensionStrategy 'react-native-camera', 'general'
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -183,6 +184,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':react-native-camera')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

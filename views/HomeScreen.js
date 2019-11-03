@@ -182,6 +182,7 @@ export default class HomeScreen extends Component
               </TouchableOpacity>
             </View>
           }
+          
         </SafeAreaView>
       </>
     );
