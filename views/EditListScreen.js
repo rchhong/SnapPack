@@ -137,7 +137,7 @@ export default class EditListScreen extends Component {
                 <View style = {{backgroundColor: 'red', alignItems: 'center', 
                                 justifyContent: 'center', width: 50, height: 50, borderRadius: 200, marginBottom: 15}}
                     >
-                    <Text style = {{color: 'white'}}>Add</Text>
+                    <Text style = {{color: 'white'}}>Submit</Text>
                 </View>
               </TouchableOpacity>
             </View>
