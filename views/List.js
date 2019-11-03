@@ -14,11 +14,13 @@ const styles = StyleSheet.create({
 		height: 100, 
 		borderRadius: 15,
 		marginBottom: 30,
-		elevation: 30,
+        elevation: 30,
+        fontFamily : 'Quicksand-Regular'
 	},
 	listText:{
 		color: '#424242',
-		fontSize: 25,
+        fontSize: 25,
+        fontFamily : 'Quicksand-Regular'
 	}
 
 });
